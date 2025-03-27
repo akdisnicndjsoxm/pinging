@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>课本单词随机朗读</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        #mainButton {
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #409eff;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 30px;
+        }
+
+        #mainButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            background-color: #66b1ff;
+        }
+
+        #wordList {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            width: 90%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #wordList li {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            color: #606266;
+        }
+
+        #wordList li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <button id="mainButton">随便一个课本单词</button>
+    <ul id="wordList"></ul>
+
+    <script>
+        // 单词列表数据
+        const tingsie = [
+            "锻炼", "拟定", "参谋", "踌躇", "眷恋",
+            "自尊", "签名", "慰问", "全力以赴", "繁忙",
+            "瑞雪", "下意识", "马革裹尸", "锻造",
+            "磨练", "搞特殊", "情不自禁"
+        ];
+
+        // 初始化列表
+        function initList() {
+            const list = document.getElementById('wordList');
+            tingsie.forEach(word => {
+                const li = document.createElement('li');
+                li.textContent = word;
+                list.appendChild(li);
+            });
+        }
+
+        // 语音朗读函数
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'zh-CN';
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持语音朗读功能');
+            }
+        }
+
+        // 按钮点击处理
+        document.getElementById('mainButton').addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * tingsie.length);
+            const selectedWord = tingsie[randomIndex];
+            
+            speakWord(selectedWord);
+            
+            if (selectedWord === "马革裹尸") {
+                alert('特别注意："裹"字的写法');
+            }
+        });
+
+        // 页面初始化
+        window.onload = initList;
+    </script>
+</body>
+</html>
